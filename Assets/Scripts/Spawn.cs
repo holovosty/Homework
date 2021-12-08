@@ -10,7 +10,9 @@ public class Spawn : MonoBehaviour
     private Transform[] _instantiantePoints;
     private int _currentPoint;
 
-    void Start()
+
+
+    public void Start()
     {
         _instantiantePoints = new Transform[_spawn.childCount];
 
@@ -22,27 +24,23 @@ public class Spawn : MonoBehaviour
         StartCoroutine(InstantiateEnemy());
     }
 
-    void Repeat()
+    private IEnumerator InstantiateEnemy()
     {
-        StartCoroutine(InstantiateEnemy());
-    }
-
-    IEnumerator InstantiateEnemy()
-    {
-        yield return new WaitForSeconds(2);
-
-        Transform instantiatePosition = _instantiantePoints[_currentPoint];
-        GameObject newEnemy = Instantiate(_tempFab, instantiatePosition.position, Quaternion.identity);
-
-        if (_currentPoint < _instantiantePoints.Length-1)
+        while (true)
         {
-            _currentPoint++;
-        }
-        else
-        {
-            _currentPoint = 0;
-        }
+            Transform instantiatePosition = _instantiantePoints[_currentPoint];
+            GameObject newEnemy = Instantiate(_tempFab, instantiatePosition.position, Quaternion.identity);
 
-        Repeat();
+            if (_currentPoint < _instantiantePoints.Length - 1)
+            {
+                _currentPoint++;
+            }
+            else
+            {
+                _currentPoint = 0;
+            }
+
+            yield return new WaitForSeconds(2);
+        }
     }
 }

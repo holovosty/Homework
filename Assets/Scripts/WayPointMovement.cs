@@ -6,12 +6,11 @@ public class WayPointMovement : MonoBehaviour
 {
     [SerializeField] private Transform _path;
     [SerializeField] private float _speed;
-    public Vector3 Direction { get; private set; }
 
     private Transform[] _points;
-    private int _currentPoint;
+    private int _targetPoint;
 
-    void Start()
+    public void Start()
     {
         _points = new Transform[_path.childCount];
 
@@ -21,33 +20,33 @@ public class WayPointMovement : MonoBehaviour
         }
     }
 
-    void GetDirection(Transform target)
+    public Vector3 GetDirection()
     {
-        Direction = (target.position - transform.position).normalized;
+        Vector3 direction = (_points[_targetPoint].position - transform.position).normalized;
+        return direction;
     }
 
-    void PointMovement()
+    private void MoveByPoints()
     {
-        Transform target = _points[_currentPoint];
+        Transform target = _points[_targetPoint];
 
-        transform.position = Vector3.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, _points[_targetPoint].position, _speed * Time.deltaTime);
 
-        if (transform.position == target.position)
+        if (transform.position == _points[_targetPoint].position)
         {
-            _currentPoint++;
+            _targetPoint++;
 
-            if (_currentPoint >= _points.Length)
+            if (_targetPoint >= _points.Length)
             {
-                _currentPoint = 1;
+                _targetPoint = 1;
             }
         }
 
-        GetDirection(target);
+        GetDirection();
     }
 
-
-    void Update()
+    public void Update()
     {
-        PointMovement();
+        MoveByPoints();
     }
 }

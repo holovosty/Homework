@@ -9,13 +9,21 @@ public class ElevatorAnimation : MonoBehaviour
 {
     private Animator _animator;
 
-    void Start()
+    public static class AnimatorController
+    {
+        public static class States
+        {
+            public const string Arrived = "ElevatorArrive";
+        }
+    }
+
+    public void Start()
     {
         _animator = GetComponent<Animator>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        _animator.SetTrigger("ElevatorArrive");
+        _animator.SetTrigger(AnimatorController.States.Arrived);
     }
 }
